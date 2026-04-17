@@ -31,7 +31,7 @@ router.get("/movieByGenre", (req, res, next) => {
     }
 
     try {
-        const movieByGenre = movieServices.getMoviesByGenre((req.query.genre));
+        const movieByGenre = movieServices.getMoviesByGenre(req.query.genre);
         if (movieByGenre.length <= 0) {
             return res.status(404).json({ message: "Genre not found" });
         }
@@ -48,11 +48,11 @@ router.get("/movieByName", (req, res, next) => {
     }
 
     try {
-        const movieByName = movieServices.getMoviesByName((req.query.name));
+        const movieByName = movieServices.getMoviesByName(req.query.name);
         if (movieByName.length <= 0) {
             return res.status(404).json({ message: "Movie not found" });
         }
-        res.status(200).json(movieByName);
+        res.status(200).json(movieByName)
     } catch (error) {
         console.log("Error in searching for movie name", error)
         next(error)
@@ -60,6 +60,7 @@ router.get("/movieByName", (req, res, next) => {
 });
 
 router.get("/movieByPrice", (req, res, next) => {
+    const regPattern = /^\d+(\.\d+)?$/
     if (req.query.minPrice === undefined && req.query.maxPrice === undefined) {
         return res.status(400).json({ "error": "Both minimum and maximum price query parameters are required" })
     }
@@ -72,31 +73,24 @@ router.get("/movieByPrice", (req, res, next) => {
         return res.status(400).json({ "error": "Maximum price query parameter is required" })
     }
 
-    if (!/^\d+(\.\d+)?$/.test(req.query.minPrice) && !/^\d+(\.\d+)?$/.test(req.query.maxPrice)) {
+    if (!regPattern.test(req.query.minPrice) && !regPattern.test(req.query.maxPrice)) {
         return res.status(400).json({ "error": "Both minimum price and maximum price query parameters must be a valid numerical values" })
     }
 
-    if (!/^\d+(\.\d+)?$/.test(req.query.minPrice)) {
+    if (!regPattern.test(req.query.minPrice)) {
         return res.status(400).json({ "error": "Minimum price query parameter must be a valid numerical value" })
     }
 
-    if (!/^\d+(\.\d+)?$/.test(req.query.maxPrice)) {
+    if (!regPattern.test(req.query.maxPrice)) {
         return res.status(400).json({ "error": "Maximum price query parameter must be a valid numerical value" })
     }
 
-    if (parseFloat(req.query.minPrice) > parseFloat(req.query.maxPrice)) {
+    if (parseFloat(req.query.minPrice) >= parseFloat(req.query.maxPrice)) {
         return res.status(400).json({ "error": "Invalid price range provided. The minimum price must be less than maximum price" })
-
     }
-
-    if (parseFloat(req.query.minPrice) === parseFloat(req.query.maxPrice)) {
-        return res.status(400).json({ "error": "Invalid price range provided. The maximum price must be greater than minimum price" })
-
-    }
-
 
     try {
-        const movieByPrice = movieServices.getMoviesByPrice(({ minPrice: req.query.minPrice, maxPrice: req.query.maxPrice }));
+        const movieByPrice = movieServices.getMoviesByPrice({ minPrice: req.query.minPrice, maxPrice: req.query.maxPrice });
         if (movieByPrice.length <= 0) {
             return res.status(400).json({ message: "Price not found" });
         }
