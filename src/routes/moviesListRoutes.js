@@ -60,6 +60,36 @@ router.get("/movieByName", (req, res, next) => {
 });
 
 router.get("/movieByPrice", (req, res, next) => {
+    if (req.query.minPrice === undefined && req.query.maxPrice === undefined) {
+        return res.status(400).json({ "error": "Both minimum and maximum price query parameters are required" })
+    }
+
+    if (req.query.minPrice === undefined) {
+        return res.status(400).json({ "error": "Minimum price query parameter is required" })
+    }
+
+    if (req.query.maxPrice === undefined) {
+        return res.status(400).json({ "error": "Maximum price query parameter is required" })
+    }
+
+    if ((isNaN(req.query.minPrice) === true) && isNaN(req.query.maxPrice) === true) {
+        return res.status(400).json({ "error": "Both minimum price and maximum price query parameters must be a valid numerical values" })
+    }
+
+    if (isNaN(req.query.minPrice) === true) {
+        return res.status(400).json({ "error": "Minimum price query parameter must be a valid numerical value" })
+    }
+
+    if (isNaN(req.query.maxPrice) === true) {
+        return res.status(400).json({ "error": "Maximum price query parameter must be a valid numerical value" })
+    }
+
+    if (parseFloat(req.query.minPrice) > parseFloat(req.query.maxPrice)) {
+        return res.status(400).json({ "error": "Invalid price range provided. The minimum price must be less than maximum price" })
+
+    }
+
+
     try {
         const movieByPrice = movieServices.getMoviesByPrice(({ minPrice: req.query.minPrice, maxPrice: req.query.maxPrice }));
         if (movieByPrice.length <= 0) {
