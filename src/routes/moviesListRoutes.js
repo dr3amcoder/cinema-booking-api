@@ -26,6 +26,10 @@ router.get("/movieById/:id", (req, res, next) => {
 });
 
 router.get("/movieByGenre", (req, res, next) => {
+    if (req.query.genre === undefined) {
+        return res.status(400).json({ "error": "genre query parameter is required" })
+    }
+
     try {
         const movieByGenre = movieServices.getMoviesByGenre((req.query.genre));
         if (!movieByGenre) {
@@ -39,6 +43,10 @@ router.get("/movieByGenre", (req, res, next) => {
 })
 
 router.get("/movieByName", (req, res, next) => {
+    if (req.query.name === undefined) {
+        return res.status(400).json({ "error": "name query parameter is required" })
+    }
+
     try {
         const movieByName = movieServices.getMoviesByName((req.query.name));
         if (!movieByName) {
