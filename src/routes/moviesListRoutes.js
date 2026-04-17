@@ -32,7 +32,7 @@ router.get("/movieByGenre", (req, res, next) => {
 
     try {
         const movieByGenre = movieServices.getMoviesByGenre((req.query.genre));
-        if (!movieByGenre) {
+        if (movieByGenre.length <= 0) {
             return res.status(404).json({ message: "Genre not found" });
         }
         res.status(200).json(movieByGenre)
@@ -49,7 +49,7 @@ router.get("/movieByName", (req, res, next) => {
 
     try {
         const movieByName = movieServices.getMoviesByName((req.query.name));
-        if (!movieByName) {
+        if (movieByName.length <= 0) {
             return res.status(404).json({ message: "Movie not found" });
         }
         res.status(200).json(movieByName);
@@ -62,7 +62,7 @@ router.get("/movieByName", (req, res, next) => {
 router.get("/movieByPrice", (req, res, next) => {
     try {
         const movieByPrice = movieServices.getMoviesByPrice(({ minPrice: req.query.minPrice, maxPrice: req.query.maxPrice }));
-        if (!movieByPrice) {
+        if (movieByPrice.length <= 0) {
             return res.status(400).json({ message: "Price not found" });
         }
         res.status(200).json(movieByPrice)
