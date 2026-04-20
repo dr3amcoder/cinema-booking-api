@@ -1,7 +1,7 @@
 {
-  "name": "resilient-quote-api",
+  "name": "cinema-booking-api",
   "version": "1.0.0",
-  "description": "A learning project to gain hands-on backend development experience with Express.js, building a quote API",
+  "description": "A learning project to gain hands-on backend development experience with Express.js, building a cinema booking API",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
