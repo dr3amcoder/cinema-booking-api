@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const movieServices = require("../services/movieServices");
+const priceValidator = require("../middleware/priceValidator")
 
 router.get("/movies", (req, res, next) => {
     try {
@@ -58,35 +59,10 @@ router.get("/movieByName", (req, res, next) => {
 });
 
 router.get("/movieByPrice", (req, res, next) => {
-    const regPattern = /^\d+(\.\d+)?$/
-    if (req.query.minPrice === undefined && req.query.maxPrice === undefined) {
-        return res.status(400).json({ "error": "Both minimum and maximum price query parameters are required" })
+    const error = priceValidator(req.query.minPrice, req.query.maxPrice)
+    if (error) {
+        return res.status(400).json({ "error": error })
     }
-
-    if (req.query.minPrice === undefined) {
-        return res.status(400).json({ "error": "Minimum price query parameter is required" })
-    }
-
-    if (req.query.maxPrice === undefined) {
-        return res.status(400).json({ "error": "Maximum price query parameter is required" })
-    }
-
-    if (!regPattern.test(req.query.minPrice) && !regPattern.test(req.query.maxPrice)) {
-        return res.status(400).json({ "error": "Both minimum price and maximum price query parameters must be a valid numerical values" })
-    }
-
-    if (!regPattern.test(req.query.minPrice)) {
-        return res.status(400).json({ "error": "Minimum price query parameter must be a valid numerical value" })
-    }
-
-    if (!regPattern.test(req.query.maxPrice)) {
-        return res.status(400).json({ "error": "Maximum price query parameter must be a valid numerical value" })
-    }
-
-    if (parseFloat(req.query.minPrice) >= parseFloat(req.query.maxPrice)) {
-        return res.status(400).json({ "error": "Invalid price range provided. The minimum price must be less than maximum price" })
-    }
-
     try {
         const movieByPrice = movieServices.getMoviesByPrice({ minPrice: req.query.minPrice, maxPrice: req.query.maxPrice });
         if (movieByPrice.length <= 0) {
