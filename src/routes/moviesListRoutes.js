@@ -12,7 +12,6 @@ router.get("/movies", (req, res, next) => {
 });
 
 router.get("/movieById/:id", (req, res, next) => {
-    console.log("I am inside the movieById route!", req.params.id)
     try {
         const movieById = movieServices.getMovieById(parseInt(req.params.id));
         if (!movieById) {
@@ -20,7 +19,6 @@ router.get("/movieById/:id", (req, res, next) => {
         }
         res.status(200).json(movieById);
     } catch (error) {
-        console.log("I am inside the catch block", error)
         next(error)
     }
 });
