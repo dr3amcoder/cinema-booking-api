@@ -25,7 +25,6 @@ router.get("/showtimeById/:id", (req, res, next) => {
     }
 })
 
-// getShowtimesByMovieId
 router.get("/showtimeByMovieId", (req, res, next) => {
     if (req.query.movieId === undefined) {
         return res.status(400).json({ "error": "Movie ID query parameter is required" })
@@ -43,7 +42,6 @@ router.get("/showtimeByMovieId", (req, res, next) => {
     }
 })
 
-// getShowtimesByDate
 router.get("/showtimeByDate", (req, res, next) => {
     if (req.query.date === undefined) {
         return res.status(400).json({ "error": "Date query parameter is required" })

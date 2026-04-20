@@ -83,6 +83,39 @@ curl "http://localhost:3000/movieByName?name=ZONE"
 curl "http://localhost:3000/movieByPrice?minPrice=10&maxPrice=13"
 ```
 
+### Get All Showtimes
+
+```http
+GET /showtimes
+```
+
+### Get Showtime by ID
+
+```http
+GET /showtimeById/:id
+```
+
+### Search Showtimes for a Movie
+
+```http
+GET /showtimeByMovieId?movieId=2
+```
+
+### Search Showtimes by Date
+
+```http
+GET /showtimeByDate?date=2026-04-25
+```
+
+**Examples:**
+
+```bash
+curl "http://localhost:3000/showtimes"
+curl "http://localhost:3000/showtimeById/1"
+curl "http://localhost:3000/showtimeByMovieId?movieId=2"
+curl "http://localhost:3000/showtimeByDate?date=2026-04-25"
+```
+
 ## 🏗️ Project Structure
 
 ```
@@ -91,14 +124,18 @@ src/
 ├── server.js           # Server entry point
 ├── data/
 │   └── movies.js       # Movie data (100 movies)
+│   └── showtimes.js       # Showtimes data (100 movies)
 ├── services/
 │   ├── helloService.js
 │   └── movieServices.js  # Movie business logic (get, filter, search)
+│   └── showtimeServices.js  # Showtimes business logic (get, filter, search)
 ├── routes/
 │   ├── helloRoutes.js
 │   └── moviesListRoutes.js
+│   └── showtimesListRoutes.js
 ├── middleware/
 │   └── errorHandler.js
+│   └── priceValidator.js
 └── tests/
     └── hello.test.js
 ```
@@ -115,6 +152,10 @@ src/
 - **String.includes()**: Partial/fuzzy string matching
 - **Case-Insensitive Matching**: Using `.toLowerCase()` on both sides of a comparison
 - **parseFloat()**: Converting string query params to numbers
+- **Related Data**: showtimes reference movieId from movies (foreign key concept)
+- **.find() vs .filter()**: single result vs multiple results
+- **Pure Function Validation**: validating input without coupling to Express (priceValidator.js)
+- **parseInt()**: converting string query/route params to integers
 
 ## 🎬 Sample Movie Data
 
@@ -132,16 +173,16 @@ The API includes 100 sample movies with:
 
 ## 🗺️ Roadmap
 
-### Phase 1: Showtimes
+### Phase 1: Showtimes -- DONE
 
 Add screening data so users can see when movies are playing.
 
-- [ ] Create `data/showtimes.js` — showtime data (id, movieId, date, time, screen, totalSeats, availableSeats)
-- [ ] Create `services/showtimeServices.js` — get showtimes by movieId, by date
-- [ ] Create `routes/showtimeRoutes.js`
-  - [ ] `GET /showtimes?movieId=1` — all showtimes for a movie
-  - [ ] `GET /showtimes?date=2026-04-01` — all showtimes on a date
-  - [ ] `GET /showtimes/:id` — single showtime details
+- [x] Create `data/showtimes.js` — showtime data (id, movieId, date, time, screen, totalSeats, availableSeats)
+- [x] Create `services/showtimeServices.js` — get showtimes by movieId, by date
+- [x] Create `routes/showtimeRoutes.js`
+  - [x] `GET /showtimeById?movieId=1` — all showtimes for a movie
+  - [x] `GET /showtimeByDate?date=2026-04-01` — all showtimes on a date
+  - [x] `GET /showtimeById/:id` — single showtime details
 
 ### Phase 2: Booking System (TDD Approach)
 
