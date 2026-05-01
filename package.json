@@ -4,7 +4,7 @@
   "description": "A learning project to gain hands-on backend development experience with Express.js, building a cinema booking API",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node src/server.js"
   },
   "keywords": [],
@@ -13,5 +13,8 @@
   "type": "commonjs",
   "dependencies": {
     "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "jest": "^30.3.0"
   }
 }
